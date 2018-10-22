@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    #canvas {
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    var canvas = document.getElementById('canvas'),
+        ctx = canvas.getContext('2d'),
+        width = document.documentElement.clientWidth,
+        height = document.documentElement.clientHeight,
+        param = {
+          num: 100,
+          color: false,  // 颜色，如果是 `false` ，则是随机渐变的
+          r: 0.9,        // 圆每次增加的半径
+          o: 0.09,       // 判断圆消失的条件，值越大，消失得越快
+          a: 1
+        },
+        color,
+        color2,
+        roundArr = [];   // 存在圆的数组
+
+    canvas.width = width;
+    canvas.height = height;
+
+    // 监听浏览器窗口的变化
+    window.onresize = function (event) {
+      width = document.documentElement.clientWidth;
+      height = document.documentElement.clientHeight;
+
+      canvas.width = width;
+      canvas.height = height;
+    };
+
+    // 判断参数中是否设置了 `color` ，如果设置了，就使用该值；如果没有设置，就使用随机的颜色
+    if (param.color) {
+      color2 = param.color;
+    } else {
+      color = Math.random() * 360;
+    }
+
+    /**
+    * 动画函数
+    **/
+    function animate () {
+      if (!param.color) {
+        color += .1;
+        color2 = `hsl(${color}, 100%, 80%)`;
+      }
+
+      ctx.clearRect(0, 0, width, height);
+
+      for (var i = 0; i < roundArr.length; i++) {
+        ctx.fillStyle = color2;
+        ctx.beginPath();
+        ctx.arc(roundArr[i].mouseX, roundArr[i].mouseY, roundArr[i].r, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fill();
+        roundArr[i].r += param.r;
+        roundArr[i].o -= param.o;
+
+        if (roundArr[i].o <= 0) {
+          roundArr.splice(i, 1);
+          i--;
+        }
+      }
+
+      window.requestAnimationFrame(animate);      
+    }
+
+    // 监听鼠标移动事件
+    window.onmousemove = function (event) {
+      var mouseX = event.clientX,
+          mouseY = event.clientY;
+
+      roundArr.push({
+        mouseX,
+        mouseY,
+        r: param.r,  // 设置半径每次增大的数值
+        o: 1         // 判断圆消失的条件，值越大，消失得越快
+      });
+      console.log(roundArr);
+    }
+
+    animate();
+  </script>
+</body>
+</html>

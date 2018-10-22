@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    html, body {
+      margin:0;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      cursor: none;
+      background: #000;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+
+  <script>
+    const WIDTH = document.documentElement.clientWidth;
+    const HEIGHT = document.documentElement.clientHeight;
+
+    var canvas = document.getElementById('canvas'),
+        ctx = canvas.getContext('2d'),
+        round = [],  // 存储随机粒子
+        initRoundPopulation = 80;  // 随机粒子的个数
+    
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
+
+    /**
+     * 随机类 
+    **/
+    function RoundItem (index, x, y) {
+      this.index = index;
+      this.x = x;
+      this.y = y;
+      this.r = Math.random() * 2 + 1;
+      var alpha = (Math.floor(Math.random() * 10) + 1) / 10 / 2;
+      this.color = `rgba(255, 255, 255, ${alpha})`;
+    }
+
+    /**
+     * 在 `RoundItem` 的原型中设置一个 `draw` 方法 
+    **/
+    RoundItem.prototype.draw = function () {
+      ctx.fillStyle = this.color;
+      ctx.shadowBlur = this.r * 2;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, 2 * Math.PI, false);
+      ctx.closePath();
+      ctx.fill();
+    }
+
+    /**
+     * 在 `RoundItem` 的原型中设置一个 `move` 方法 
+    **/
+    RoundItem.prototype.move = function () {
+      this.y -= 0.15;
+      if (this.y <= -10) {
+        this.y = HEIGHT + 10;
+      }
+      this.draw();
+    }
+
+    /**
+     * 动画函数 
+    **/
+    function animate () {
+      ctx.clearRect(0, 0, WIDTH, HEIGHT);
+      for (var i in round) {
+        round[i].move();
+      }
+      requestAnimationFrame(animate);
+    }
+
+    /**
+     * 初始化函数 
+    **/
+    function init () {
+      for (var i = 0; i < initRoundPopulation; i++) {
+        round[i] = new RoundItem(i, Math.random() * WIDTH, Math.random() * HEIGHT);
+        round[i].draw();
+      }
+      animate();
+    }
+
+    init();
+  </script>
+</body>
+</html>
