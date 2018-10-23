@@ -39,12 +39,12 @@
   </style>
 </head>
 <body>
-  <div class = "control" style = "position:absolute">
+  <!-- <div class = "control" style = "position:absolute">
     <input type = "text" value = "尧思敏" id = "t">
     <button onclick = "changeText(t.value)">
       change
     </button>
-  </div>
+  </div> -->
 
   <script>
     /*jshint esversion:6*/
@@ -161,13 +161,14 @@
     }
     function draw(){
       cfill();
-     for(i = 0;i < particles.length;++i){
-       particles[i].update();
-       particles[i].draw();
-     } 
+      for(i = 0;i < particles.length;++i){
+        particles[i].update();
+        particles[i].draw();
+      }
+      window.requestAnimationFrame(draw);
     }
     changeText('尧思敏');
-    setInterval(draw, 1);
+    draw();
   </script>
 </body>
 </html>
