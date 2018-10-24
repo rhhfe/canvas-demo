@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+<body>
+  <audio id="audio" src="http://m10.music.126.net/20181023102244/c1c4666a7f62d2b2e750b8c8d71e5382/ymusic/9ddc/b10e/919e/2ef50b0473f7f2cce3193ed620898cd7.mp3" autoplay="autoplay" controls="controls" type="audio/mp3"></audio>
+
+  <script>
+    document.getElementById('audio').addEventListener('loadedmetadata', function () {
+      this.play();
+    });
+  </script>
+</body>
+</html>
